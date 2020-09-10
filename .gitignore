@@ -1,0 +1,5 @@
+
+# Elastic Beanstalk Files
+fameium/.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

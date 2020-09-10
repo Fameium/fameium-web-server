@@ -25,9 +25,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "q)4%1(i^#-n4oltphj8c*#!xrz5n@tjy)yvlf_g%@c0s@+w!pf"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["fameium-dev.ap-south-1.elasticbeanstalk.com"]
 
 
 # Application definition
@@ -86,9 +86,9 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "fameium",
         "USER": "fameium",
-        "PASSWORD": "",
-        "HOST": "localhost",
-        "PORT": "",
+        "PASSWORD": "#OpennFamee97*",
+        "HOST": "aag9nmmc7sa8uf.crkzjczwezgn.ap-south-1.rds.amazonaws.com",
+        "PORT": "5432",
     }
 }
 
@@ -130,3 +130,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = "/static/"
+
+
+REST_FRAMEWORK = {  # to avoid using restframework's browsable api
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    )
+}
