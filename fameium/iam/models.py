@@ -21,6 +21,8 @@ class Tenant(models.Model):
     """
 
     portal_name = models.CharField(max_length=50)
+    created_time = models.DateTimeField(auto_now_add=True)
+    last_edited_time = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name = "Tenant"
@@ -38,6 +40,8 @@ class TenantModel(models.Model):
     """
 
     tenant = models.ForeignKey(Tenant, on_delete=models.CASCADE)
+    created_time = models.DateTimeField(auto_now_add=True)
+    last_edited_time = models.DateTimeField(auto_now=True)
 
     class Meta:
         abstract = True
@@ -52,6 +56,8 @@ class User(AbstractUser):
     phone = models.CharField(max_length=50)
     isd_code = models.CharField(max_length=10, blank=True, null=True)
     country = models.CharField(max_length=5)
+    created_time = models.DateTimeField(auto_now_add=True)
+    last_edited_time = models.DateTimeField(auto_now=True)
     tenants = models.ManyToManyField(
         Tenant,
         null=True,

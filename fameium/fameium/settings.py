@@ -25,9 +25,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "q)4%1(i^#-n4oltphj8c*#!xrz5n@tjy)yvlf_g%@c0s@+w!pf"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ["fameium-dev.ap-south-1.elasticbeanstalk.com"]
+ALLOWED_HOSTS = ["api-dev.fameium.com", "localhost"]
 
 
 # Application definition
@@ -39,12 +39,16 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "iam",
     "rest_framework",
     "rest_framework.authtoken",
+    "corsheaders",
+    "iam",
+    "productivity",
 ]
 
+# keep corsheader middleware as high as possible.
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -52,6 +56,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "iam.middleware.TenantMiddleware",
 ]
 
 ROOT_URLCONF = "fameium.urls"
@@ -133,7 +138,22 @@ STATIC_URL = "/static/"
 
 
 REST_FRAMEWORK = {  # to avoid using restframework's browsable api
-    'DEFAULT_RENDERER_CLASSES': (
-        'rest_framework.renderers.JSONRenderer',
-    )
+    "DEFAULT_RENDERER_CLASSES": (
+        "djangorestframework_camel_case.render.CamelCaseJSONRenderer",
+    ),
+    "DEFAULT_PARSER_CLASSES": (
+        "djangorestframework_camel_case.parser.CamelCaseFormParser",
+        "djangorestframework_camel_case.parser.CamelCaseMultiPartParser",
+        "djangorestframework_camel_case.parser.CamelCaseJSONParser",
+    ),
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework.authentication.TokenAuthentication",
+    ),
+    "DEFAULT_PERMISSION_CLASSES": (
+        "rest_framework.permissions.IsAuthenticated",
+        "iam.permission.TenantPermission",
+    ),
 }
+
+CORS_ORIGIN_ALLOW_ALL = True
+APPEND_SLASH = False
