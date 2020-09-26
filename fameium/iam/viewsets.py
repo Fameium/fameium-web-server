@@ -12,6 +12,7 @@ class ModelTenantViewSet(viewsets.ModelViewSet):
 
     extra_create_params = {}
     extra_update_params = {}
+    ordering = ["-last_edited_time"]
 
     def get_queryset(self):
         """

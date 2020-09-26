@@ -2,7 +2,7 @@
 Handles serializers for productivity module
 """
 from rest_framework import serializers
-from productivity.models import Project, Idea, Sponsership
+from productivity.models import Project, Idea, Sponsorship, Template
 
 from django.db.utils import IntegrityError
 
@@ -35,7 +35,7 @@ class ProjectSerializer(DynamicFieldsModelSerializer):
             "id",
             "name",
             "description",
-            "motes",
+            "notes",
             "created_time",
             "start_date",
             "end_date",
@@ -54,24 +54,24 @@ class IdeaSerializer(DynamicFieldsModelSerializer):
             "id",
             "name",
             "description",
-            "motes",
+            "notes",
             "created_time",
             "last_edited_time",
         ]
         read_only_fields = ["id", "created_time", "last_edited_time"]
 
 
-class SponsershipSerializer(DynamicFieldsModelSerializer):
+class SponsorshipSerializer(DynamicFieldsModelSerializer):
 
     projects = serializers.SerializerMethodField()
 
     class Meta:
-        model = Sponsership
+        model = Sponsorship
         fields = [
             "id",
             "name",
             "description",
-            "motes",
+            "notes",
             "sponsorship_type",
             "no_of_videos",
             "start_date",
@@ -94,12 +94,12 @@ class SponsershipSerializer(DynamicFieldsModelSerializer):
 
 class TemplateSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Idea
+        model = Template
         fields = [
             "id",
             "name",
             "description",
-            "motes",
+            "notes",
             "content",
             "created_time",
             "last_edited_time",
