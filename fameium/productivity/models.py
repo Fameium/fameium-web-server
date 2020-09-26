@@ -12,18 +12,18 @@ class AbstractProductivityModel(TenantModel):
 
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=1500, blank=True)
-    motes = models.CharField(max_length=1500, blank=True)
+    notes = models.CharField(max_length=1500, blank=True)
 
     class Meta:
         abstract = True
 
 
-class Sponsership(AbstractProductivityModel):
+class Sponsorship(AbstractProductivityModel):
     """
-    Database model for  Sponsership details.
+    Database model for  Sponsorship details.
     """
 
-    class SponsershipType(models.IntegerChoices):
+    class SponsorshipType(models.IntegerChoices):
         """
         Status choice for the sponsorship_type.
         """
@@ -32,11 +32,11 @@ class Sponsership(AbstractProductivityModel):
         SHOUTOUT = 1
 
     sponsorship_type = models.IntegerField(
-        choices=SponsershipType.choices, default=SponsershipType.DEDICATED
+        choices=SponsorshipType.choices, default=SponsorshipType.DEDICATED
     )
     no_of_videos = models.PositiveIntegerField(blank=True, null=True)
-    start_date = models.DateTimeField(null=True, blank=True)
-    end_date = models.DateTimeField(null=True, blank=True)
+    start_date = models.DateField(null=True, blank=True)
+    end_date = models.DateField(null=True, blank=True)
     total_amount = models.PositiveIntegerField(blank=True, null=True)
     agreement = models.TextField(max_length=2500, blank=True)
 
@@ -60,11 +60,11 @@ class Project(AbstractProductivityModel):
         COMPLETED = 5
         PUBLISHED = 6
 
-    start_date = models.DateTimeField(null=True, blank=True)
-    end_date = models.DateTimeField(null=True, blank=True)
+    start_date = models.DateField(null=True, blank=True)
+    end_date = models.DateField(null=True, blank=True)
     status = models.IntegerField(choices=Status.choices, default=Status.TODO)
     sponsorships = models.ManyToManyField(
-        Sponsership,
+        Sponsorship,
         null=True,
         blank=True,
     )

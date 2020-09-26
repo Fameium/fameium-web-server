@@ -7,11 +7,11 @@ from iam.viewsets import ModelTenantViewSet
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from productivity.models import Project, Idea, Sponsership, Template
+from productivity.models import Project, Idea, Sponsorship, Template
 from productivity.serializers import (
     ProjectSerializer,
     IdeaSerializer,
-    SponsershipSerializer,
+    SponsorshipSerializer,
     TemplateSerializer,
 )
 
@@ -23,6 +23,19 @@ class ProjectViewSet(ModelTenantViewSet):
 
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
+    ordering_fields = fields = [
+        "id",
+        "name",
+        "description",
+        "notes",
+        "created_time",
+        "start_date",
+        "end_date",
+        "status",
+        "sponsorships",
+        "script",
+        "last_edited_time",
+    ]
 
 
 class IdeaViewSet(ModelTenantViewSet):
@@ -32,15 +45,38 @@ class IdeaViewSet(ModelTenantViewSet):
 
     queryset = Idea.objects.all()
     serializer_class = IdeaSerializer
+    ordering_fields = [
+        "id",
+        "name",
+        "description",
+        "notes",
+        "created_time",
+        "last_edited_time",
+    ]
 
 
-class SponsershipViewSet(ModelTenantViewSet):
+class SponsorshipViewSet(ModelTenantViewSet):
     """
-    ViewSet for viewing and editing sponserships.
+    ViewSet for viewing and editing sponsorships.
     """
 
-    queryset = Sponsership.objects.all()
-    serializer_class = SponsershipSerializer
+    queryset = Sponsorship.objects.all()
+    serializer_class = SponsorshipSerializer
+    ordering_fields = [
+        "id",
+        "name",
+        "description",
+        "notes",
+        "sponsorship_type",
+        "no_of_videos",
+        "start_date",
+        "end_date",
+        "total_amount",
+        "agreement",
+        "projects",
+        "created_time",
+        "last_edited_time",
+    ]
 
 
 class TemplateViewSet(ModelTenantViewSet):
@@ -50,6 +86,15 @@ class TemplateViewSet(ModelTenantViewSet):
 
     queryset = Template.objects.all()
     serializer_class = TemplateSerializer
+    ordering_fields = [
+        "id",
+        "name",
+        "description",
+        "notes",
+        "content",
+        "created_time",
+        "last_edited_time",
+    ]
 
 
 class ProductivityView(APIView):
@@ -58,9 +103,13 @@ class ProductivityView(APIView):
     """
 
     def get(self, request, *args, **kwargs):
-        projects = Project.objects.filter(tenant=request.tenant)
-        ideas = Idea.objects.filter(tenant=request.tenant)
-        sponserships = Sponsership.objects.filter(tenant=request.tenant)
+        projects = Project.objects.filter(tenant=request.tenant).order_by(
+            "-last_edited_time"
+        )
+        ideas = Idea.objects.filter(tenant=request.tenant).order_by("-last_edited_time")
+        sponsorships = Sponsorship.objects.filter(tenant=request.tenant).order_by(
+            "-last_edited_time"
+        )
 
         context = {
             "request": request,
@@ -72,14 +121,14 @@ class ProductivityView(APIView):
         ideas_serializer = IdeaSerializer(
             ideas, many=True, context=context, fields=("id", "name")
         )
-        sponserships_serializer = SponsershipSerializer(
-            sponserships, many=True, context=context, fields=("id", "name")
+        sponsorships_serializer = SponsorshipSerializer(
+            sponsorships, many=True, context=context, fields=("id", "name")
         )
 
         response = {
             "projects": projects_serializer.data,
             "ideas": ideas_serializer.data,
-            "sponserships": sponserships_serializer.data,
+            "sponsorships": sponsorships_serializer.data,
         }
 
         return Response(response)

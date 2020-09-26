@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "iam",
     "productivity",
+    "django_filters",
 ]
 
 # keep corsheader middleware as high as possible.
@@ -153,6 +154,7 @@ REST_FRAMEWORK = {  # to avoid using restframework's browsable api
         "rest_framework.permissions.IsAuthenticated",
         "iam.permission.TenantPermission",
     ),
+    "DEFAULT_FILTER_BACKENDS": ["rest_framework.filters.OrderingFilter"],
 }
 
 CORS_ORIGIN_ALLOW_ALL = True
